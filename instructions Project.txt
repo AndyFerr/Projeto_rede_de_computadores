@@ -1,0 +1,21 @@
+instructions Project
+
+if you created your .py program using some text editor you need to convert it to unix  so you can run it on Linux. do this: 
+
+1 - put this on the first line on your program:
+#!/usr/bin/env python3
+
+2 - Convert the file to Unix format to run on Linux
+dos2unix script.py
+
+3 - Allow the execution:
+chmod +x script.py
+
+4 - Run the file
+./script.py
+
+
+
+to find the IP address on lniux:
+<hostname -I>
+<>

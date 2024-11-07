@@ -115,7 +115,7 @@ except socket.error as msg:
 
 nickname_setter()
 msg = client_socket.recv(1024).decode("utf-8")
-print(f"{msg} Press '/close' to leave the chat.\n")
+print(f"{msg} Type '/close' to leave the chat.\n")
 rcv_thread = threading.Thread(target=message_recv)
 send_thread = threading.Thread(target=message_send)
 

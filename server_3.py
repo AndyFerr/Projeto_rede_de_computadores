@@ -56,6 +56,8 @@ def recv_message(client):
         except:
             print(f"An unexpect error has occured at the rcv msg! Closing connection at {clients_addresses[client_indexing]}")
             clients_sockets.remove(client)
+            clients_nicknames.remove(nickname)
+            clients_addresses.remove(clients_addresses[client_indexing])
             broadcast_msg(f"{nickname} has been disconnected")
 
             client.close()
@@ -101,9 +103,9 @@ while True:
 
     while True:
         try:
-            client_nickname = client.recv(1024).decode("utf-8")
+            nickname = client.recv(1024).decode("utf-8")
             
-            if (client_nickname in nicknames):
+            if (nickname in clients_nicknames):
                 client.send("FALSE".encode("utf-8"))
             else:
                 client.send("TRUE".encode("utf-8"))
@@ -111,12 +113,14 @@ while True:
         except:
             print("An unexpect error has occured! Closing connection")
             client.close()
-    
-    client.send(f"Welcome to the server {client_nickname}!".encode("utf-8"))
+    if (clients_sockets):
+        msg = f"{nickname} joined the chat group!\n"
+        broadcast_msg(msg, client)
+    client.send(f"Welcome to the group chat {nickname}!".encode("utf-8"))
     
     
 
-    clients_nicknames.append(client_nickname)
+    clients_nicknames.append(nickname)
     clients_addresses.append(address)
     clients_sockets.append(client)
     

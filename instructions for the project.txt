@@ -1,0 +1,17 @@
+1- If you running on Linux, convert the file to Unix type:
+	1.1 - instal dos2unix command, run: <sudo pip install dos2unix>
+	1.2 - allow the execution: <chmod +x script.py>
+	1.3 - run: dos2unix server_3.py
+	1.4 - run dos2unix client_3.py
+
+2 After converting the diles you will need to find the local host ip address, run <hostname -I> for Linux or ipconfig for windows
+
+3 - Set the host ip on servers_address on client_3.py file
+
+4 - Make sure that both programs are using the same port
+
+5 - run the server first and then run the client
+
+6 - set a nickname and start using the chat
+
+	

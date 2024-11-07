@@ -2,8 +2,6 @@
 
 import socket
 import threading
-import time
-import sys
 import os
 
 #######################################################################
@@ -70,20 +68,20 @@ def recv_message(client):
 
 
 """
-    define the port and gets the host ip
+    define the port and gthe host ip to send it to any connection in the network
 """
 
 port = 12345
 host = "0.0.0.0"
 
 """
-    Defnine 4 lists to be managed by the threading
+    Defnine 4 lists to be managed by the threading and a flag to stop some processes
 """
 clients_sockets = []
 clients_nicknames = []
 clients_addresses = []
 nicknames = []
-threads_list = []
+
 stop_threading = False
 
 
@@ -124,11 +122,3 @@ while True:
     
     client_thread = threading.Thread(target=recv_message, args=[client])
     client_thread.start()
-    # threads_list.append(client_thread)
-
-
-
-
-
-   # [<socket.socket fd=1068, family=2, type=1, proto=0, laddr=('192.168.112.1', 12345), raddr=('192.168.118.10', 34574)>, <socket.socket fd=1092, family=2, type=1, proto=0, laddr=('192.168.112.1', 12345), raddr=('192.168.118.10', 34580)>]
-    

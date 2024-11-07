@@ -1,12 +1,22 @@
+#!/usr/bin/env python3
+
 import socket
 import threading
 import time
 import sys
+import os
 
 #######################################################################
 #                     Defining functions
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def broadcast_msg(message, clientSender):
+    """
+        send the message received from clientSender to all the clients on the server
+        except for the clientSender himself
+    """
     for client in clients_sockets:
         if (client != clientSender):
             client.send(message.encode("utf-8"))
@@ -19,30 +29,40 @@ def recv_message(client):
         verify if it's the key message to exit the chat and if not, send it to everybody
         if it is, remove the user from the chat group
     """
+    global stop_threading
 
-    client_indexing = clients_sockets.index(client)
-    nickname = clients_nicknames[client_indexing]
 
-    while True:
+    while (not stop_threading):
+        client_indexing = clients_sockets.index(client)
+        nickname = clients_nicknames[client_indexing]
         try:
             message = client.recv(2048).decode("utf-8")
             
-            if message == r"\close":
+            if message == "/close":
+                
+                print(f"{clients_addresses[client_indexing]} has been disconnected\n")
+                clients_addresses.remove(clients_addresses[client_indexing])
                 clients_sockets.remove(client)
-                clients_addresses.remove(client_indexing)
                 clients_nicknames.remove(nickname)
 
                 msg = (f"{nickname} disconnected!")
 
                 broadcast_msg(msg, client)
+                client.close()
+                stop_threading = True
 
                 break
             else:
                 msg = f"{nickname}: {message}\n"
                 broadcast_msg(msg, client)
         except:
-            print("An unexpect error has occured at the rcv msg!")
-            sys.exit()
+            print(f"An unexpect error has occured at the rcv msg! Closing connection at {clients_addresses[client_indexing]}")
+            clients_sockets.remove(client)
+            broadcast_msg(f"{nickname} has been disconnected")
+
+            client.close()
+            stop_threading = True
+            
             
 #######################################################################
 
@@ -64,6 +84,7 @@ clients_nicknames = []
 clients_addresses = []
 nicknames = []
 threads_list = []
+stop_threading = False
 
 
 """
@@ -93,13 +114,21 @@ while True:
             print("An unexpect error has occured! Closing connection")
             client.close()
     
-    client.send(f"Welcome to the server {client_nickname}!\n".encode("utf-8"))
+    client.send(f"Welcome to the server {client_nickname}!".encode("utf-8"))
     
-    clients_nicknames.append(client_nickname)
-    clients_sockets.append(client)
-    clients_addresses.append(address)
+    
 
-    recv_send_messages_clients = threading.Thread(target=recv_message, args=[client])
-    recv_send_messages_clients.start()
-    # threads_list.append(recv_send_messages_clients)
+    clients_nicknames.append(client_nickname)
+    clients_addresses.append(address)
+    clients_sockets.append(client)
+    
+    client_thread = threading.Thread(target=recv_message, args=[client])
+    client_thread.start()
+    # threads_list.append(client_thread)
+
+
+
+
+
+   # [<socket.socket fd=1068, family=2, type=1, proto=0, laddr=('192.168.112.1', 12345), raddr=('192.168.118.10', 34574)>, <socket.socket fd=1092, family=2, type=1, proto=0, laddr=('192.168.112.1', 12345), raddr=('192.168.118.10', 34580)>]
     

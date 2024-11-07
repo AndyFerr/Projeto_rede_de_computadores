@@ -31,13 +31,19 @@ def recv_message(client):
 
 
     while (not stop_threading):
-        client_indexing = clients_sockets.index(client)
-        nickname = clients_nicknames[client_indexing]
+        # client_indexing = clients_sockets.index(client)
+        # nickname = clients_nicknames[client_indexing]
         try:
             message = client.recv(2048).decode("utf-8")
-            
+
+            client_indexing = clients_sockets.index(client)
+            nickname = clients_nicknames[client_indexing]
+
             if message == "/close":
                 
+                # client_indexing = clients_sockets.index(client)
+                # nickname = clients_nicknames[client_indexing]
+
                 print(f"{clients_addresses[client_indexing]} has been disconnected\n")
                 clients_addresses.remove(clients_addresses[client_indexing])
                 clients_sockets.remove(client)
@@ -54,6 +60,10 @@ def recv_message(client):
                 msg = f"{nickname}: {message}\n"
                 broadcast_msg(msg, client)
         except:
+            
+            client_indexing = clients_sockets.index(client)
+            nickname = clients_nicknames[client_indexing]
+            
             print(f"An unexpect error has occured at the rcv msg! Closing connection at {clients_addresses[client_indexing]}")
             clients_sockets.remove(client)
             clients_nicknames.remove(nickname)

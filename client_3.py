@@ -46,7 +46,7 @@ def nickname_setter():
             if (response == "FALSE"):
                 clear_terminal()
                 print("This nickname already exists. Try another one!")
-                time.sleep(1)
+                time.sleep(2)
                 clear_terminal()
             else:
                 clear_terminal()

@@ -31,8 +31,7 @@ def recv_message(client):
 
 
     while (not stop_threading):
-        # client_indexing = clients_sockets.index(client)
-        # nickname = clients_nicknames[client_indexing]
+
         try:
             message = client.recv(2048).decode("utf-8")
 
@@ -40,9 +39,6 @@ def recv_message(client):
             nickname = clients_nicknames[client_indexing]
 
             if message == "/close":
-                
-                # client_indexing = clients_sockets.index(client)
-                # nickname = clients_nicknames[client_indexing]
 
                 print(f"{clients_addresses[client_indexing]} has been disconnected\n")
                 clients_addresses.remove(clients_addresses[client_indexing])
